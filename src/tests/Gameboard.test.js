@@ -1,5 +1,5 @@
-import Gameboard from './Gameboard';
-import Ship from './Ship';
+import Gameboard from '../modules/Gameboard';
+import Ship from '../modules/Ship';
 
 test('Gameboard should have a height of 7', () => {
     const gameboard = new Gameboard();
