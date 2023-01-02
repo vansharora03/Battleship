@@ -36,15 +36,17 @@ const Gameboard = function() {
     //Store the board's ships
     let ships = [];
 
+
     /**
-     * Place a ship on board at coordinates specified either vertically or horizontally
+     * Place a ship on board at coordinates specified 
+     * either vertically or horizontally, return false if
+     * placing this ship will overlap with another
      * @param {*} x 
      * @param {*} y 
      * @param {*} ship 
      * @param {*} horizontal 
      */
     const placeShip = function(x, y, ship, horizontal=false) {
-        this.ships.push(ship);
         let start = [x, y];
         if(horizontal) {
             if(x + ship.length - 1 >= 7) {
@@ -52,6 +54,15 @@ const Gameboard = function() {
             }
             let startingY = start[1];
             let startingX = start[0];
+
+            //Check for overlap
+            for(let i = 0; i < ship.length; i++) {
+                if(this.board[startingX + i][startingY].ship) {
+                    return false;
+                }
+            }
+
+            this.ships.push(ship);
     
             for(let i = 0; i < ship.length; i++) {
                 this.board[startingX + i][startingY].ship = ship;
@@ -63,17 +74,50 @@ const Gameboard = function() {
             }
             let startingY = start[1];
             let startingX = start[0];
+
+            //Check for overlap
+            for(let i = 0; i < ship.length; i++) {
+                if(this.board[startingX][startingY + i].ship) {
+                    return false;
+                }
+            }
+
+            this.ships.push(ship);
     
             for(let i = 0; i < ship.length; i++) {
                 this.board[startingX][startingY + i].ship = ship;
             }
         }
-        
+    }
+
+    /**
+     * Try to attack a coordinate, if has been tried already, do nothing
+     * @param {*} x 
+     * @param {*} y 
+     */
+    const receiveAttack = function(x, y) {
+        let toAttack = this.board[x][y];
+
+        if(toAttack.tried) {
+            return;
+        }
+        toAttack.tried = true;
+        if(toAttack.ship !== null) {
+            toAttack.ship.hit();
+        }
+    }
+
+    /**
+     * Return whether all ships have been sunk or not
+     */
+    const lost = function() {
+        let ships = this.ships;
+        return ships.every((ship) => ship.isSunk());
     }
 
 
 
-    return{board, placeShip, ships};
+    return{board, ships, placeShip, receiveAttack, lost};
 }
 
 export default Gameboard;
