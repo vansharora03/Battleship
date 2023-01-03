@@ -95,4 +95,17 @@ test('Gameboard can prevent ships from placing overlapping ships', () => {
     expect(gameboard.placeShip(0, 1, ship2, true)).toBe(false);
     
 })
+
+test('Gameboard should detect attacks that have not been made before', () => {
+    const gameboard = new Gameboard();
+    let firstAttack = gameboard.receiveAttack(0,0);
+    expect(firstAttack).toBe(true);
+})
+
+test('Gameboard should detect attacks that have been made before', () => {
+    const gameboard = new Gameboard();
+    gameboard.receiveAttack(0,0);
+    let secondAttack = gameboard.receiveAttack(0,0);
+    expect(secondAttack).toBe(false);
+})
     
