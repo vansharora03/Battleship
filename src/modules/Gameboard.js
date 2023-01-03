@@ -101,12 +101,13 @@ const Gameboard = function() {
         let toAttack = this.board[y][x];
 
         if(toAttack.tried) {
-            return;
+            return false;
         }
         toAttack.tried = true;
         if(toAttack.ship !== null) {
             toAttack.ship.hit();
         }
+        return true;
     }
 
     /**

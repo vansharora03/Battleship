@@ -1,6 +1,9 @@
 :root {
-    --user-ship-color : var(blue);
-    --grid-border-color : var(black);
+    --user-ship-color : blue;
+    --grid-border-color : black;
+    --computer-ship-color : green;
+    --damaged-color : red;
+    --missed-color : orange;
 }
 
 .content {
@@ -22,6 +25,21 @@
     border-color: var(--grid-border-color)
 }
 
-.ship {
-    background-color: blue;
+
+.user-board > .ship {
+    background-color: var(--user-ship-color);
 }
+
+.computer-board > .ship {
+    background-color: var(--computer-ship-color);
+}
+
+.damaged-ship {
+    background-color: red;
+}
+
+.missed {
+    background-color: var(--missed-color);
+
+}
+

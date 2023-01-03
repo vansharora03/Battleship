@@ -13,6 +13,9 @@ const renderer = function (content) {
     user.opponent = computer;
     computer.opponent = user;
 
+    //keep track of turns
+    let turn = user;
+
     /**
      * Render the user's gameboard
      */
@@ -49,15 +52,47 @@ const renderer = function (content) {
         user.gameboard.placeShip(2, 5, ship3, true);
 
         //re-render ships
-        renderShips();
+        renderShips(user);
 
     }
 
-    const renderShips = function() {
-        const squares = document.querySelectorAll(".user-board-square");
+    /**
+     * Automatically place and render computer ships
+     */
+    const autoPlaceComputerShips = function() {
+        const computerShip = new Ship(2);
+        const computerShip2 = new Ship(3);
+        const computerShip3 = new Ship(5);
+
+        //place computer ships on the gameboard
+        computer.gameboard.placeShip(0, 0, computerShip);
+        computer.gameboard.placeShip(3, 1, computerShip2);
+        computer.gameboard.placeShip(2, 5, computerShip3, true);
+
+        //re-render computer ships
+        renderShips(computer);
+
+    }
+
+    /**
+     * Render player's ships
+     */
+    const renderShips = function(player) {
+        const squareClass = player == user? '.user-board-square' : '.computer-board-square'
+        const squares = document.querySelectorAll(squareClass);
         squares.forEach(square => {
-            if(user.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)].ship !== null) {
+            const gameSquareStatus = player.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)];
+            if(gameSquareStatus.ship !== null) {
                 square.classList.add("ship");
+                if(gameSquareStatus.tried) {
+                    square.classList.remove("ship");
+                    square.classList.add("damaged-ship");
+                }
+            }
+            else {
+                if(gameSquareStatus.tried) {
+                    square.classList.add("missed");
+                }
             }
         })
     }
@@ -81,12 +116,41 @@ const renderer = function (content) {
         content.appendChild(computerBoard);
     }
 
+    /**
+     * Allow player to attack opponent;
+     */
+    const readyToAttack = function(player) {
+        let opponent = player.opponent;
+        const opponentSquareClass = opponent == user? '.user-board-square' : '.computer-board-square';
+        const squares = document.querySelectorAll(opponentSquareClass);
+        squares.forEach(square => {
+            square.addEventListener('click', () => {
+                if(turn !== player) {
+                    return;
+                }
+                let attack = opponent.gameboard.receiveAttack(parseInt(square.dataset.x), parseInt(square.dataset.y));
+                renderShips(opponent);
+                if(attack === true) {
+                    turn = opponent;
+                }
+            })
+        });
+
+    }
+
 
     /**
      * Begin game loop
      */
     const startGame = function(){
+
+        //place ships
         autoPlaceShips();
+        autoPlaceComputerShips();
+
+        //ready attack listeners
+        readyToAttack(user);
+        readyToAttack(computer);
     }
 
     
