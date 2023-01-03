@@ -24,6 +24,9 @@ const renderer = function (content) {
     const toPlace = [Ship(2), Ship(1), Ship(3)];
     let shipNumber = 0;
 
+    //keep track of rotation axis
+    let horizontal = false;
+
     /**
      * Render the user's gameboard
      */
@@ -134,7 +137,48 @@ const renderer = function (content) {
         let x = parseInt(e.target.dataset.x);
         let y = parseInt(e.target.dataset.y);
         let start = [x, y];
+        if(horizontal) {
+            if(x + length - 1 >= 7) {
+                start = [7 - length, y];
+            }
+            let startingY = start[1];
+            let startingX = start[0];
 
+            //Check for overlap
+            for(let i = 0; i < length; i++) {
+                if(user.gameboard.board[startingY][startingX + i].ship) {
+                    e.target.classList.add('not-placeable');
+                    e.target.addEventListener('mouseout', () => {
+                        e.target.classList.remove('not-placeable');
+                    })
+                    return;
+                }
+            }
+
+            let placeables = new Set();
+        
+            for(let i = 0; i < length; i++) {
+                squares.forEach(square => {
+                    if(square.dataset.y === (startingY)+"" && square.dataset.x === (startingX+i)+"") {
+                        //if in range
+                        square.classList.add('placeable');
+                        //place the square in the placeables set
+                        placeables.add(square);
+    
+                    }
+                    e.target.addEventListener('mouseout', () => {
+                        //empty out the marked squares and remove their placeable class
+                        placeables.forEach( square => {
+                            placeables.delete(square);
+                            square.classList.remove('placeable');
+                        }
+                        )
+                    })
+                })
+            }
+            return;
+        }
+        
         if(y + length - 1 >= 7) {
             start = [x, 7 - length];
         }
@@ -152,16 +196,20 @@ const renderer = function (content) {
             }
         }
 
+        //store the squares that are marked for placement
         let placeables = new Set();
-
+        
         for(let i = 0; i < length; i++) {
             squares.forEach(square => {
                 if(square.dataset.y === (startingY + i)+"" && square.dataset.x === startingX+"") {
+                    //if in range
                     square.classList.add('placeable');
+                    //place the square in the placeables set
                     placeables.add(square);
 
                 }
                 e.target.addEventListener('mouseout', () => {
+                    //empty out the marked squares and remove their placeable class
                     placeables.forEach( square => {
                         placeables.delete(square);
                         square.classList.remove('placeable');
@@ -180,7 +228,7 @@ const renderer = function (content) {
             return;
         }
         let ship = toPlace[shipNumber];
-        let placed = user.gameboard.placeShip(parseInt(e.target.dataset.x), parseInt(e.target.dataset.y), ship);
+        let placed = user.gameboard.placeShip(parseInt(e.target.dataset.x), parseInt(e.target.dataset.y), ship, horizontal);
         renderShips(user);
         shipNumber++;
         if(shipNumber >= toPlace.length) {
@@ -189,6 +237,8 @@ const renderer = function (content) {
                 square.removeEventListener('mouseover', addPlaceableStyle);
                 square.removeEventListener('click', placeShip);
             });
+            const rotateBtn = document.querySelector('.rotate-btn');
+            rotateBtn.style.visibility = 'hidden';
             beginBattle();
         }
         else {
@@ -302,6 +352,14 @@ const renderer = function (content) {
     const startGame = function() {
         const startGameBtn = document.querySelector(".start-game-btn");
         startGameBtn.style.visibility = 'hidden';
+        
+        const rotateBtn = document.querySelector(".rotate-btn");
+        rotateBtn.style.visibility = 'visible';
+        rotateBtn.addEventListener('click', () => {
+            horizontal = horizontal? false : true;
+        });
+
+
         document.querySelector(".game-status").textContent = `Place your ${toPlace[shipNumber].length}-length ship`;
         //place ships
         //place computer ship
