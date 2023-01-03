@@ -246,12 +246,10 @@ const renderer = function (content) {
         const gameStatus = document.querySelector('.game-status');
         squares.forEach(square => {
             square.addEventListener('click', (e) => {
-                console.log(e.target);
                 if(turn !== player) {
                     return;
                 }
                 let attack = player.attack(parseInt(square.dataset.x), parseInt(square.dataset.y));
-                console.log(attack);
                 if(attack && opponent.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)].ship !== null) {
                     gameStatus.textContent = "Ship damaged!"
                     if(opponent.gameboard.lost()) {
