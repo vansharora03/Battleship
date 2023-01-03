@@ -117,9 +117,27 @@ const renderer = function (content) {
     }
 
     /**
+     * Computer strikes 
+     */
+    const computerMove = function () {
+        if(turn !== computer) {
+            return;
+        }
+        computer.computerAttack();
+
+        renderShips(computer.opponent);
+        if(computer.opponent.gameboard.lost()) {
+            document.querySelector('.game-status').textContent = "Computer wins!";
+        }
+
+        turn = computer.opponent;
+        
+    }
+
+    /**
      * Allow player to attack opponent;
      */
-    const readyToAttack = function(player) {
+    const readyToAttack = function(player, cpuPlaying=true) {
         let opponent = player.opponent;
         const opponentSquareClass = opponent == user? '.user-board-square' : '.computer-board-square';
         const squares = document.querySelectorAll(opponentSquareClass);
@@ -129,7 +147,7 @@ const renderer = function (content) {
                 if(turn !== player) {
                     return;
                 }
-                let attack = opponent.gameboard.receiveAttack(parseInt(square.dataset.x), parseInt(square.dataset.y));
+                let attack = player.attack(parseInt(square.dataset.x), parseInt(square.dataset.y));
                 if(attack && opponent.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)].ship !== null) {
                     gameStatus.textContent = "Ship damaged!"
                     if(opponent.gameboard.lost()) {
@@ -145,6 +163,9 @@ const renderer = function (content) {
                 renderShips(opponent);
                 if(attack === true) {
                     turn = opponent;
+                    if(cpuPlaying === true) {
+                        computerMove();
+                    }
                 }
             })
         });
@@ -163,7 +184,6 @@ const renderer = function (content) {
 
         //ready attack listeners
         readyToAttack(user);
-        readyToAttack(computer);
     }
 
     
