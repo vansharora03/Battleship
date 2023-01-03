@@ -4,12 +4,21 @@
     --computer-ship-color : green;
     --damaged-color : red;
     --missed-color : orange;
+    --placeable-color : lightblue;
+    --not-placeable-color : grey;
 }
 
 .content {
     display: flex;
     gap: 20px;
 }
+
+.begin-battle-btn {
+    visibility: hidden;
+}
+
+
+
 
 .user-board, .computer-board {
     display : grid;
@@ -23,6 +32,15 @@
 .user-board-square, .computer-board-square {
     border: 1px solid;
     border-color: var(--grid-border-color)
+}
+
+.placeable {
+    background-color: var(--placeable-color);
+
+}
+
+.not-placeable {
+    background-color: var(--not-placeable-color);
 }
 
 
