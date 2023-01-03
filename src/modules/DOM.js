@@ -33,6 +33,35 @@ const renderer = function (content) {
         content.appendChild(userBoard);
     }
 
+
+    /**
+     * Automatically place and render a ship for testing purposes
+     */
+    const autoPlaceShips = function() {
+        const ship1 = new Ship(2);
+        const ship2 = new Ship(3);
+        const ship3 = new Ship(5);
+
+
+        //place ships on the gameboard
+        user.gameboard.placeShip(0, 0, ship1);
+        user.gameboard.placeShip(3, 1, ship2);
+        user.gameboard.placeShip(2, 5, ship3, true);
+
+        //re-render ships
+        renderShips();
+
+    }
+
+    const renderShips = function() {
+        const squares = document.querySelectorAll(".user-board-square");
+        squares.forEach(square => {
+            if(user.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)].ship !== null) {
+                square.classList.add("ship");
+            }
+        })
+    }
+
     /**
      * Render the computer's gameboard
      */
@@ -52,7 +81,17 @@ const renderer = function (content) {
         content.appendChild(computerBoard);
     }
 
-    return{setUpUserBoard, setUpComputerBoard}
+
+    /**
+     * Begin game loop
+     */
+    const startGame = function(){
+        autoPlaceShips();
+    }
+
+    
+
+    return{setUpUserBoard, setUpComputerBoard, startGame}
 }
 
 export default renderer;

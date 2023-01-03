@@ -1,3 +1,8 @@
+:root {
+    --user-ship-color : var(blue);
+    --grid-border-color : var(black);
+}
+
 .content {
     display: flex;
     gap: 20px;
@@ -6,12 +11,17 @@
 .user-board, .computer-board {
     display : grid;
 
-    height: 500px;
-    width: 500px;
+    height: 400px;
+    width: 400px;
 
     grid-template-columns: repeat(7, 1fr);
 }
 
 .user-board-square, .computer-board-square {
-    border: 1px solid black;
+    border: 1px solid;
+    border-color: var(--grid-border-color)
+}
+
+.ship {
+    background-color: blue;
 }
