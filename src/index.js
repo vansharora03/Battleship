@@ -1,7 +1,7 @@
 import renderer from "./modules/DOM";
 
 const content = document.querySelector(".content");
-const startGameBtn = document.querySelector(".startGameBtn");
+const startGameBtn = document.querySelector(".start-game-btn");
 
 const contentRender = renderer(content);
 

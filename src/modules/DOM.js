@@ -123,12 +123,25 @@ const renderer = function (content) {
         let opponent = player.opponent;
         const opponentSquareClass = opponent == user? '.user-board-square' : '.computer-board-square';
         const squares = document.querySelectorAll(opponentSquareClass);
+        const gameStatus = document.querySelector('.game-status');
         squares.forEach(square => {
             square.addEventListener('click', () => {
                 if(turn !== player) {
                     return;
                 }
                 let attack = opponent.gameboard.receiveAttack(parseInt(square.dataset.x), parseInt(square.dataset.y));
+                if(attack && opponent.gameboard.board[parseInt(square.dataset.y)][parseInt(square.dataset.x)].ship !== null) {
+                    gameStatus.textContent = "Ship damaged!"
+                    if(opponent.gameboard.lost()) {
+                        gameStatus.textContent = "You win!";
+                    }
+                }
+                else if(attack) {
+                    gameStatus.textContent = "Miss!"
+                }
+                else {
+                    gameStatus.textContent = "Already struck here! Try again."
+                }
                 renderShips(opponent);
                 if(attack === true) {
                     turn = opponent;
