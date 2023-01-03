@@ -22,8 +22,8 @@ test('Gameboard should have no tries by default', () => {
 })
 
 test('Gameboard should be able to place ships', () => {
-    const gameboard = new Gameboard();
-    const ship = new Ship(2);
+    const gameboard = Gameboard();
+    const ship = Ship(2);
     gameboard.placeShip(0, 1, ship);
     expect(gameboard.board[0][2].ship).toBe(ship);
 })

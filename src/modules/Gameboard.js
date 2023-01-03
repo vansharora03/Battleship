@@ -43,49 +43,50 @@ const Gameboard = function() {
      * placing this ship will overlap with another
      * @param {*} x 
      * @param {*} y 
-     * @param {*} ship 
+     * @param {*} length 
      * @param {*} horizontal 
      */
-    const placeShip = function(x, y, ship, horizontal=false) {
+    const placeShip = function(x, y, shipNew, horizontal=false) {
+        
         let start = [x, y];
         if(horizontal) {
-            if(x + ship.length - 1 >= 7) {
-                start = [7 - ship.length, y];
+            if(x + shipNew.length - 1 >= 7) {
+                start = [7 - shipNew.length, y];
             }
             let startingY = start[1];
             let startingX = start[0];
 
             //Check for overlap
-            for(let i = 0; i < ship.length; i++) {
+            for(let i = 0; i < shipNew.length; i++) {
                 if(this.board[startingX + i][startingY].ship) {
                     return false;
                 }
             }
 
-            this.ships.push(ship);
+            this.ships.push(shipNew);
     
-            for(let i = 0; i < ship.length; i++) {
-                this.board[startingX + i][startingY].ship = ship;
+            for(let i = 0; i < shipNew.length; i++) {
+                this.board[startingX + i][startingY].ship = shipNew;
             }
         }
         else {
-            if(y + ship.length - 1 >= 7) {
-                start = [x, 7 - ship.length];
+            if(y + shipNew.length - 1 >= 7) {
+                start = [x, 7 - shipNew.length];
             }
             let startingY = start[1];
             let startingX = start[0];
 
             //Check for overlap
-            for(let i = 0; i < ship.length; i++) {
+            for(let i = 0; i < shipNew.length; i++) {
                 if(this.board[startingX][startingY + i].ship) {
                     return false;
                 }
             }
 
-            this.ships.push(ship);
+            this.ships.push(shipNew);
     
-            for(let i = 0; i < ship.length; i++) {
-                this.board[startingX][startingY + i].ship = ship;
+            for(let i = 0; i < shipNew.length; i++) {
+                this.board[startingX][startingY + i].ship = shipNew;
             }
         }
     }
