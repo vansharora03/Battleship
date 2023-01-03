@@ -13,9 +13,9 @@ const Player = function () {
      * @param {*} y 
      */
     const attack = function(x, y) {
-        if(!alreadyHit.has(this.opponent.gameboard.board[x][y])) {
+        if(!alreadyHit.has(this.opponent.gameboard.board[y][x])) {
             this.opponent.gameboard.receiveAttack(x, y);
-            alreadyHit.add(this.opponent.gameboard.board[x][y]);
+            alreadyHit.add(this.opponent.gameboard.board[y][x]);
         }
     }
 
@@ -26,9 +26,9 @@ const Player = function () {
     const computerAttack = function(randomizer=_randomizer) {
         let x = randomizer(7);
         let y = randomizer(7);
-        if(!alreadyHit.has(this.opponent.gameboard.board[x][y])) {
+        if(!alreadyHit.has(this.opponent.gameboard.board[y][x])) {
             attack.call(this, x, y)
-            alreadyHit.add(this.opponent.gameboard.board[x][y]);
+            alreadyHit.add(this.opponent.gameboard.board[y][x]);
         }
         else{
             computerAttack.call(this, randomizer);

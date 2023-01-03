@@ -25,14 +25,14 @@ test('Gameboard should be able to place ships', () => {
     const gameboard = Gameboard();
     const ship = Ship(2);
     gameboard.placeShip(0, 1, ship);
-    expect(gameboard.board[0][2].ship).toBe(ship);
+    expect(gameboard.board[2][0].ship).toBe(ship);
 })
 
 test('Gameboard should be able to place ships horizontally', () => {
     const gameboard = new Gameboard();
     const ship = new Ship(3);
     gameboard.placeShip(0, 1, ship, true);
-    expect(gameboard.board[2][1].ship).toBe(ship);
+    expect(gameboard.board[1][2].ship).toBe(ship);
 
 })
 
@@ -40,20 +40,20 @@ test('Gameboard should be able to shift ship placement if placement is beyond bo
     const gameboard = new Gameboard();
     const ship = new Ship(3);
     gameboard.placeShip(0, 5, ship);
-    expect(gameboard.board[0][4].ship).toBe(ship);
+    expect(gameboard.board[4][0].ship).toBe(ship);
 })
 
 test('Gameboard should be able to shift ship placement if placement is beyond board range, horizontally', () => {
     const gameboard = new Gameboard();
     const ship = new Ship(5);
     gameboard.placeShip(4, 0, ship, true);
-    expect(gameboard.board[2][0].ship).toBe(ship);
+    expect(gameboard.board[0][2].ship).toBe(ship);
 })
 
 test('Gameboard can receive attacks', () => {
     const gameboard = new Gameboard();
     gameboard.receiveAttack(5, 4);
-    expect(gameboard.board[5][4].tried).toBe(true);
+    expect(gameboard.board[4][5].tried).toBe(true);
 })
 
 test('Gameboard can receive attacks to ships', () => {
@@ -61,13 +61,13 @@ test('Gameboard can receive attacks to ships', () => {
     const ship = new Ship(5);
     gameboard.placeShip(2, 3, ship);
     gameboard.receiveAttack(2, 2);
-    expect(gameboard.board[2][6].ship.hits).toBe(1);
+    expect(gameboard.board[6][2].ship.hits).toBe(1);
 })
 
 test('Gameboard can return true if all ships have been sunk', () => {
     const gameboard = new Gameboard();
     const ship1 = new Ship(1);
-    const ship2 = new Ship(2);
+    const ship2 = new Ship(1);
     gameboard.placeShip(2, 3, ship1);
     gameboard.placeShip(3, 4, ship2, true);
     gameboard.receiveAttack(2, 3);

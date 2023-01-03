@@ -8,7 +8,7 @@ test('Players can attack each other', () => {
     player1.opponent = player2;
 
     player1.attack(0, 1);
-    expect(player2.gameboard.board[0][1].tried).toBe(true);
+    expect(player2.gameboard.board[1][0].tried).toBe(true);
 })
 
 test('Computer can attack player ship', () => {

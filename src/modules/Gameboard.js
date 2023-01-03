@@ -58,7 +58,7 @@ const Gameboard = function() {
 
             //Check for overlap
             for(let i = 0; i < shipNew.length; i++) {
-                if(this.board[startingX + i][startingY].ship) {
+                if(this.board[startingY][startingX + i].ship) {
                     return false;
                 }
             }
@@ -66,7 +66,7 @@ const Gameboard = function() {
             this.ships.push(shipNew);
     
             for(let i = 0; i < shipNew.length; i++) {
-                this.board[startingX + i][startingY].ship = shipNew;
+                this.board[startingY][startingX + i].ship = shipNew;
             }
         }
         else {
@@ -78,7 +78,7 @@ const Gameboard = function() {
 
             //Check for overlap
             for(let i = 0; i < shipNew.length; i++) {
-                if(this.board[startingX][startingY + i].ship) {
+                if(this.board[startingY + i][startingX].ship) {
                     return false;
                 }
             }
@@ -86,9 +86,10 @@ const Gameboard = function() {
             this.ships.push(shipNew);
     
             for(let i = 0; i < shipNew.length; i++) {
-                this.board[startingX][startingY + i].ship = shipNew;
+                this.board[startingY + i][startingX].ship = shipNew;
             }
         }
+        return true;
     }
 
     /**
@@ -97,7 +98,7 @@ const Gameboard = function() {
      * @param {*} y 
      */
     const receiveAttack = function(x, y) {
-        let toAttack = this.board[x][y];
+        let toAttack = this.board[y][x];
 
         if(toAttack.tried) {
             return;
