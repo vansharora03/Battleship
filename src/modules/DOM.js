@@ -230,10 +230,21 @@ const renderer = function (content) {
         renderShips(computer.opponent);
         if(computer.opponent.gameboard.lost()) {
             document.querySelector('.game-status').textContent = "Computer wins!";
+            endGame(computer);
         }
 
         turn = computer.opponent;
         
+    }
+
+    /**
+     * End the game
+     */
+    const endGame = function(winner) {
+        const gameOver = document.createElement("div");
+        gameOver.classList.add("game-over");
+        gameOver.textContent = winner===computer? 'You Lost!' : `You Won!`;
+        document.querySelector('.content').appendChild(gameOver);
     }
 
     /**
@@ -254,6 +265,7 @@ const renderer = function (content) {
                     gameStatus.textContent = "Ship damaged!"
                     if(opponent.gameboard.lost()) {
                         gameStatus.textContent = "You win!";
+                        endGame(user);
                     }
                 }
                 else if(attack) {
