@@ -13,7 +13,10 @@ const Player = function () {
      * @param {*} y 
      */
     const attack = function(x, y) {
-        this.opponent.gameboard.receiveAttack(x, y);
+        if(!alreadyHit.has(this.opponent.gameboard.board[x][y])) {
+            this.opponent.gameboard.receiveAttack(x, y);
+            alreadyHit.add(this.opponent.gameboard.board[x][y]);
+        }
     }
 
     const _randomizer = function(n) {
