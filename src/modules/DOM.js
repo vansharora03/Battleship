@@ -21,7 +21,7 @@ const renderer = function (content) {
 
 
     //Keep track of placeable ships and which ship is being placed
-    const toPlace = [Ship(2), Ship(1), Ship(3)];
+    const toPlace = [Ship(5), Ship(4), Ship(3)];
     let shipNumber = 0;
 
     //keep track of rotation axis
